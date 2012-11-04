@@ -425,13 +425,17 @@ void WebSocketClient::generateHash(char buffer[], size_t bufferlen) {
   for(int i = 0; i < 16; i++) {
     bytes[i] = random(255);
   }
-  base64Encode(bytes, 16, buffer, bufferlen);
+  size_t s = base64Encode(bytes, 16, buffer, bufferlen);
+  
+#ifdef TRACE
+  debug(F("Base64 encoded size: %d"), s);
+#endif  
 }
 
-size_t WebSocketClient::base64Encode(byte* src, size_t srclength, char* target, size_t targetsize) {
+size_t WebSocketClient::base64Encode(byte* src, size_t srclength, char* target, size_t targsize) {
   
   size_t datalength = 0;
-	char input[3];
+	byte input[3];
 	char output[4];
 	size_t i;
   
@@ -484,7 +488,7 @@ size_t WebSocketClient::base64Encode(byte* src, size_t srclength, char* target, 
 	if (datalength >= targsize) {
 		return (-1);
   }
-	target[datalength] = '\0';
+	target[datalength] = 0x0;
 	return (datalength);
 }
 
